@@ -96,7 +96,8 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { Route } from 'vue-router'
-import { Dictionary } from 'vuex'
+// import { Dictionary } from 'vuex'
+import { Iquery } from './query'
 import { Form as ElForm, Input } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
 import { isValidUsername } from '@/utils/validate'
@@ -137,13 +138,13 @@ export default class extends Vue {
   private loading = false
   private showDialog = false
   private redirect?: string
-  private otherQuery: Dictionary<string> = {}
+  private otherQuery: Iquery = {}
 
   @Watch('$route', { immediate: true })
   private onRouteChange(route: Route) {
     // TODO: remove the "as Dictionary<string>" hack after v4 release for vue-router
     // See https://github.com/vuejs/vue-router/pull/2050 for details
-    const query = route.query as Dictionary<string>
+    const query = route.query as Iquery
     if (query) {
       this.redirect = query.redirect
       this.otherQuery = this.getOtherQuery(query)
@@ -188,13 +189,13 @@ export default class extends Vue {
     })
   }
 
-  private getOtherQuery(query: Dictionary<string>) {
+  private getOtherQuery(query: Iquery) {
     return Object.keys(query).reduce((acc, cur) => {
       if (cur !== 'redirect') {
         acc[cur] = query[cur]
       }
       return acc
-    }, {} as Dictionary<string>)
+    }, {} as Iquery)
   }
 }
 </script>
